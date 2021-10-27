@@ -6,7 +6,9 @@
 #include <climits>
 #include <cstddef>
 
-typedef boost::mpl::list<int> test_types;
+//typedef boost::mpl::list<int> test_types;
+
+BOOST_AUTO_TEST_SUITE(TESTSUITE_null_object)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_null_object)
 {
@@ -38,80 +40,117 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_null_object)
 		BOOST_CHECK_EQUAL(compNum.image(), INT_MIN);
 	}
 }
+BOOST_AUTO_TEST_SUITE_END()
 
-BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORSOBJECT)
+BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORS_PLUS)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Plus_1)
+{
+		const Complex compNum1(0, 0);
+		const Complex compNum2(1, 1);
+
+		Complex compNumResult(1,1);	
+		BOOST_CHECK_EQUAL(compNum1 + compNum2, compNumResult);
+}
+	
+BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Plus_2)
+{
+		const Complex compNum1(0, INT_MAX);
+		const Complex compNum2(INT_MAX, 0);
+
+		const Complex compNumResult(INT_MAX, INT_MAX);	
+		BOOST_CHECK_EQUAL(compNum1 + compNum2, compNumResult);
+}
+
+BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Plus_3)
+{
+		const double Num1(5);
+		const Complex compNum2(5, 5);
+
+		const Complex compNumResult(10, 5);	
+		BOOST_CHECK_EQUAL(Num1 + compNum2, compNumResult);
+}
+
+BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Plus_4)
+{
+		const double Num2(5);
+		const Complex compNum1(5, 5);
+
+		const Complex compNumResult(10, 5);	
+		BOOST_CHECK_EQUAL(compNum1 + Num2, compNumResult);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORS_MINUS)
+
+BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Minus_1)
 {
 	const Complex compNum1(INT_MAX, INT_MAX);
 	const Complex compNum2(INT_MAX, INT_MAX);
 
-	const Complex compNumResult(INT_MAX-1, INT_MAX-1);	
-	BOOST_CHECK_EQUAL(compNum1 + compNum2, compNumResult);
+	const Complex compNumResult(0, 0);	
+	BOOST_CHECK_EQUAL(compNum1 - compNum2, compNumResult);
 }
 
-BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Plus_2)
+BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Minus_N)
 {
-	const Complex compNum1(0, INT_MAX);
-	const Complex compNum2(INT_MAX, 0);
+	const Complex compNum1(INT_MAX, INT_MAX);
+	const Complex compNum2(0, 0);
+	//BOOST_TEST_MESSAGE(INT_MIN);
 
 	const Complex compNumResult(INT_MAX, INT_MAX);	
 	BOOST_CHECK_EQUAL(compNum1 + compNum2, compNumResult);
 }
 
-BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Mines_1)
-{
-	const Complex compNum1(INT_MAX, INT_MAX);
-	const Complex compNum2(INT_MAX, INT_MAX);
+BOOST_AUTO_TEST_SUITE_END()
 
-	const Complex compNumResult(0, 0);	
-	BOOST_CHECK_EQUAL(compNum1 - compNum2, compNumResult);
-}
-
-BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Mines_2)
-{
-	const Complex compNum1(0, INT_MAX);
-	const Complex compNum2(INT_MAX, 0);
-
-	const Complex compNumResult(-INT_MAX, INT_MAX);	
-	BOOST_CHECK_EQUAL(compNum1 - compNum2, compNumResult);
-}
+BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORS_MULTIPLY)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Multiply_1)
 {
-	const Complex compNum1(2, 2);
-	const Complex compNum2(2, 2);
+	Complex compNum1(1, 1);
+	Complex compNum2(1, 1);
 
-	const Complex compNumResult(0, 0);	
+	Complex compNumResult(0, 2);
 	BOOST_CHECK_EQUAL(compNum1 * compNum2, compNumResult);
 }
 
-BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Multiply_2)
-{
-	const Complex compNum1(0, INT_MAX);
-	const Complex compNum2(1, 0);
+BOOST_AUTO_TEST_SUITE_END()
 
-	const Complex compNumResult(1, INT_MAX);	
-	BOOST_CHECK_EQUAL(compNum1 - compNum2, compNumResult);
-}
+BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORS_DEVIDE)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Devide_1)
 {
-	const Complex compNum1(2, 2);
-	const Complex compNum2(2, 2);
+	Complex compNum2(-2, 1);
+	Complex compNum1(0, 0);
 
-	const Complex compNumResult(0, 0);	
+	BOOST_TEST_CONTEXT("Complex Number is Null?")
+	{
+		BOOST_REQUIRE(compNum2 != Complex());
+	}
+
+	Complex compNumResult(0, 0);	
 	BOOST_CHECK_EQUAL(compNum1 / compNum2, compNumResult);
 }
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Devide_2)
 {
-	const Complex compNum1(0, INT_MAX);
-	const Complex compNum2(1, 0);
+	Complex compNum1(1, 1);
+	Complex compNum2(1, 1);
 
-	const Complex compNumResult(1, INT_MAX);	
-	BOOST_CHECK_EQUAL(compNum1 / compNum2, compNumResult);
+	BOOST_TEST_CONTEXT("Complex Number is Null?")
+	{
+		BOOST_REQUIRE(compNum2 != Complex());
+	}
+
+	Complex compNumResult(1, 0);	
+	//BOOST_CHECK_EQUAL(compNum1 / compNum2, compNumResult);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE( BLOCK_OPERATORS )
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_EQUAL)
 {
@@ -123,10 +162,21 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_EQUAL)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOT_EQUAL)
 {
-	const Complex compNum1(1, 10);
-	const Complex compNum2(1, 10);
+	BOOST_TEST_CONTEXT("Unequal real part")
+	{
+		const Complex compNum1(2, 10);
+		const Complex compNum2(1, 10);
 
-	BOOST_CHECK(compNum1 != compNum2);
+		BOOST_CHECK(compNum1 != compNum2);
+	}
+
+	BOOST_TEST_CONTEXT("Unequal real part")
+	{
+		const Complex compNum1(1, 11);
+		const Complex compNum2(1, 10);
+
+		BOOST_CHECK(compNum1 != compNum2);
+	}
 }
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_ASSIGN)
@@ -241,7 +291,9 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUAL_NUMBER_BY_COMPLEX)
 	BOOST_CHECK_EQUAL(result, true);
 }
 
-// int& abs() const;
+ BOOST_AUTO_TEST_SUITE_END()
+
+// // int& abs() const;
 BOOST_AUTO_TEST_CASE(TEST_CHECK_ABS)
 {
 	BOOST_TEST_CONTEXT("First compare check abs")
@@ -266,28 +318,29 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_ABS)
 	}
 }
 
-// BOOST_AUTO_TEST_CASE(TEST_CHECK_CONJ)
-// {
-// 	//Complex& conj(const Complex& complValue);
-// 	BOOST_TEST_CONTEXT("First compare check abs")
-// 	{
-// 		const Complex compNumber = Complex(1,1);
-// 		const Complex answerNumber = compNumber.conj();
-// 		BOOST_CHECK_EQUAL(compNumber, -answerNumber);
-// 	}
-// }
+BOOST_AUTO_TEST_CASE(TEST_CHECK_CONJ)
+{
+	//Complex& conj(const Complex& complValue);
+	BOOST_TEST_CONTEXT("First compare check abs")
+	{
+		const Complex compNumber = Complex(1,1);
+		const Complex answerNumber = compNumber.conj();
+		BOOST_CHECK_EQUAL(compNumber, -answerNumber);
+	}
+}
 
 // int& arg() const;
-// BOOST_AUTO_TEST_CASE(TEST_CHECK_ABS)
-// {
-// 	BOOST_TEST_CONTEXT("First compare check arg")
-// 	{
-// 	}
-// }
+BOOST_AUTO_TEST_CASE(TEST_CHECK_ARG)
+{
+	BOOST_TEST_CONTEXT("First compare check arg")
+	{
+		BOOST_TEST_MESSAGE("Need define formula");
+	}
+}
 	// int& norm() const;
 
 	// Complex& conj(const Complex& complValue);
 	// Complex& polar(const Complex& complValue);
 	// Complex& proj(const Complex& complValue);
 
-BOOST_AUTO_TEST_SUITE_END()
+//
