@@ -1,41 +1,63 @@
 #pragma once
+#include <iostream>
 #include <sstream>
-//MAKE class template
-//template<typename _T>
 
-class Complex{
-	//template<typename _T>
+class Complex
+{
 public:
 
-	Complex(const int real = 0, const int image = 0)
-		: m_real(real)
-		, m_image(image)
+	Complex():
+		m_real(0),
+		m_image(0)
 	{}
 
-	const int real() const;
+	Complex(const double real, const double image):
+		m_real(real),
+		m_image(image)
+	{}
 
-	const int image() const;
+	const double real() const
+	{
+		return m_real;
+	}
 
-	friend std::istream& operator>> (std::istream& is, int& value);
-	friend std::ostream& operator<< (const std::ostream& _stream, const int& value);
+	const double image() const
+	{
+		return m_image;
+	}
 
-	// list operators and operations https://ru.wikipedia.org/wiki/%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%8B_%D0%B2_C_%D0%B8_C%2B%2B 
+	friend std::istream& operator>> (std::istream& is, Complex& value)
+	{
+		return is >> value;
+	}
 
-	friend Complex operator+ (const Complex& compNum1, const Complex& compNum2);
-	friend Complex operator- (const Complex& compNum1, const Complex& compNum2);
-
-	friend Complex operator* (const Complex& compNum1, const Complex& compNum2);
-	friend Complex operator/ (const Complex& compNum1, const Complex& compNum2);
-
-	friend bool operator==(const Complex lhs, const Complex rhs);
-	friend bool operator==(const Complex lhs, const int val);
-	friend bool operator==(const int val, const Complex rhs);
-
-	friend bool operator!=(const Complex lhs, const Complex rhs);
-	friend bool operator!=(const Complex lhs, const int val);
-	friend bool operator!=(const int val, const Complex rhs);
+	friend std::ostream& operator<< (std::ostream& os, const Complex& value)
+	{
+		return os << value;
+	}
 
 	Complex& operator=(const Complex& complValue);
+
+	private:
+	friend bool operator==(const Complex& lhs, const Complex& rhs);
+	friend bool operator==(const Complex& lhs, const double val);
+	friend bool operator==(const double val, const Complex& rhs);
+
+	friend bool operator!=(const Complex& lhs, const Complex& rhs);
+	friend bool operator!=(const Complex& lhs, const double val);
+	friend bool operator!=(const double val, const Complex& rhs);
+
+	friend Complex operator+ (const Complex& compNum1, const Complex& compNum2);
+	friend Complex operator+ (const double val, const Complex& compNum);
+	friend Complex operator+ (const Complex& compNum, const double val);
+
+	friend Complex operator- (const Complex& compNum1, const Complex& compNum2);
+	friend Complex operator- (const double val, const Complex& compNum);
+	friend Complex operator- (const Complex& compNum, const double val);
+
+	friend Complex operator* (const Complex& compNum1, const Complex& compNum2);
+
+	friend Complex operator/ (const Complex& compNum1, const Complex& compNum2);
 
 	Complex& operator+=(const Complex& complValue);
 	Complex& operator-=(const Complex& complValue);
@@ -43,16 +65,80 @@ public:
 	Complex& operator*=(const Complex& complValue);
 	Complex& operator/=(const Complex& complValue);
 
-	int& abs() const;
-	int& arg() const;
-	int& norm() const;
+	double& abs() const;
+	// double& arg() const;
+	// double& norm() const;
 
 	Complex& conj(const Complex& complValue);
-	Complex& polar(const Complex& complValue);
-	Complex& proj(const Complex& complValue);
+	// Complex& polar(const Complex& complValue);
+	// Complex& proj(const Complex& complValue);
 
 	private:
-		int m_real = 0;
-		int m_image = 0;
+		double m_real = 0;
+		double m_image = 0;
 };
-//if implement template class need implementation specialization
+
+bool operator==(const Complex& lhs, const Complex& rhs)
+{
+	return (lhs.real() == rhs.real() && lhs.image() == rhs.image());
+}
+
+bool operator==(const Complex& lhs, const double val)
+{
+	return (lhs.real() == val);
+}
+
+bool operator==(const double val, const Complex& rhs)
+{
+	return (rhs.real() == val);
+}
+
+bool operator!=(const Complex& lhs, const Complex& rhs)
+{
+	return !(operator==(lhs,rhs));
+}
+
+bool operator!=(const Complex& lhs, const double val)
+{
+	return !(operator==(lhs,val));
+}
+
+bool operator!=(const double val, const Complex& rhs)
+{
+	return !(operator==(val,rhs));
+}
+
+Complex operator+ (const Complex& compNum1, const Complex& compNum2)
+{
+	return Complex(compNum1.real() + compNum2.real(), compNum1.m_image + compNum2.m_image);
+}
+
+Complex operator+ (const double Num1, const Complex& compNum2)
+{
+	return Complex(Num1 + compNum2.real(), compNum2.image());
+}
+
+Complex operator+ (const Complex& compNum1, const double Num2)
+{
+	return Complex(compNum1.real() + Num2, compNum1.image());
+}
+
+Complex operator- (const Complex& compNum1, const Complex& compNum2)
+{
+	return Complex(compNum1.real() - compNum2.real(), compNum1.m_image - compNum2.m_image);
+}
+
+Complex operator* (const Complex& compNum1, const Complex& compNum2)
+{
+	return Complex(compNum1.real()*compNum2.real() - compNum1.image()*compNum2.image(), compNum1.real()*compNum2.image() + compNum1.image()*compNum2.real());
+}
+
+Complex operator/ (const Complex& compNum1, const Complex& compNum2)
+{
+	const double deniminator = compNum2.real()*compNum2.real() + compNum2.image()*compNum2.image();
+
+	return Complex(
+					(compNum1.real()*compNum2.real()+compNum1.image()*compNum2.image())/deniminator, 
+					(compNum1.image()*compNum2.real() - compNum1.real()*compNum2.image())/deniminator
+					);
+}
