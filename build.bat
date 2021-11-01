@@ -3,14 +3,13 @@
 BUILD_DIR="build"
 APPLICATION_NAME="Compllib"
 
-if [ -d "$BUILD_DIR" ]; then
-  rm -Rf $BUILD_DIR
-fi
+test -d "$BUILD_DIR" && rm -Rf $BUILD_DIR
 
+clear
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 cmake ..
 make -j3
-echo ""
-echo ""
-./$APPLICATION_NAME
+echo "\n\n"
+
+test -f "$APPLICATION_NAME" && ./$APPLICATION_NAME
