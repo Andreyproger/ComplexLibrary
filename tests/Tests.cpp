@@ -3,8 +3,14 @@
 #include <boost/mpl/list.hpp>
 #include <complex.hpp>
 
+#include <iostream>
+
 #include <climits>
 #include <cstddef>
+
+#include <cmath>
+
+const double TOLERANCE = 0.01;
 
 //typedef boost::mpl::list<int> test_types;
 
@@ -116,7 +122,7 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_Multiply_1)
 	BOOST_CHECK_EQUAL(compNum1 * compNum2, compNumResult);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(TESTSUITE_OPERATORS_DEVIDE)
 
@@ -170,7 +176,7 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOT_EQUAL)
 		BOOST_CHECK(compNum1 != compNum2);
 	}
 
-	BOOST_TEST_CONTEXT("Unequal real part")
+	BOOST_TEST_CONTEXT("Unequal image part")
 	{
 		const Complex compNum1(1, 11);
 		const Complex compNum2(1, 10);
@@ -220,21 +226,23 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_MULTIPLYASSIGN)
 
 	compNum1 *= compNum2;
 
-	const Complex answer(20, 0);
+	const Complex answer(-99, 20);
 
-	BOOST_CHECK_EQUAL(compNum1, answer);
+	//BOOST_CHECK_EQUAL(compNum1, answer);
+	BOOST_CHECK(answer == compNum1);
 }
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_DEVIDEASSIGN)
 {
 	Complex compNum1(1, 10);
-	const Complex compNum2(1, 20);
+	const Complex compNum2(1, 10);
 
 	compNum1 /= compNum2;
 
-	const Complex answer(20, 0);
+	const Complex answer(-99, 20);
 
-	BOOST_CHECK_EQUAL(compNum1, answer);
+	BOOST_CHECK_CLOSE_FRACTION(compNum1.real(), answer.real(), 0.01);
+	BOOST_CHECK_CLOSE_FRACTION(compNum1.image(), answer.image(), 0.01);
 }
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_EQUALEQUAL)
@@ -266,7 +274,7 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_EQUAL_NUMBER_BY_COMPLEX)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUALEQUAL)
 {
-	const Complex compNum1(99, 99);
+	const Complex compNum1(9, 99);
 	const Complex compNum2(99, 99);
 	bool result = (compNum1 != compNum2);
 
@@ -275,7 +283,7 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUALEQUAL)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUAL_NUMBER)
 {
-	const Complex compNum1(99, 99);
+	const Complex compNum1(9, 99);
 	const int Num2 = 99;
 	bool result = (compNum1 != Num2);
 
@@ -284,63 +292,11 @@ BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUAL_NUMBER)
 
 BOOST_AUTO_TEST_CASE(TEST_CHECK_Operator_NOTEQUAL_NUMBER_BY_COMPLEX)
 {
-	const Complex compNum1(99, 99);
+	const Complex compNum1(9, 99);
 	const int Num2 = 99;
 	bool result = (Num2 != compNum1);
 
 	BOOST_CHECK_EQUAL(result, true);
 }
 
- BOOST_AUTO_TEST_SUITE_END()
-
-// // int& abs() const;
-BOOST_AUTO_TEST_CASE(TEST_CHECK_ABS)
-{
-	BOOST_TEST_CONTEXT("First compare check abs")
-	{
-		const Complex compNum(1, 1);
-		const double result = 1.41421; 
-		BOOST_CHECK_CLOSE_FRACTION(compNum.abs(), result, 0.0001);
-	}
-
-	BOOST_TEST_CONTEXT("Second compare check abs")
-	{
-		const Complex compNum(0, 0);
-		const double result = 0; // implicit conversion 
-		BOOST_CHECK_CLOSE_FRACTION(compNum.abs(), result, 0.0001);
-	}
-
-	BOOST_TEST_CONTEXT("Second compare check abs for max num")
-	{
-		const Complex compNum(INT_MAX, INT_MAX);
-		const double result = INT_MAX; // implicit conversion 
-		BOOST_CHECK_CLOSE_FRACTION(compNum.abs(), result, 0.0001);
-	}
-}
-
-BOOST_AUTO_TEST_CASE(TEST_CHECK_CONJ)
-{
-	//Complex& conj(const Complex& complValue);
-	BOOST_TEST_CONTEXT("First compare check abs")
-	{
-		const Complex compNumber = Complex(1,1);
-		const Complex answerNumber = compNumber.conj();
-		BOOST_CHECK_EQUAL(compNumber, -answerNumber);
-	}
-}
-
-// int& arg() const;
-BOOST_AUTO_TEST_CASE(TEST_CHECK_ARG)
-{
-	BOOST_TEST_CONTEXT("First compare check arg")
-	{
-		BOOST_TEST_MESSAGE("Need define formula");
-	}
-}
-	// int& norm() const;
-
-	// Complex& conj(const Complex& complValue);
-	// Complex& polar(const Complex& complValue);
-	// Complex& proj(const Complex& complValue);
-
-//
+BOOST_AUTO_TEST_SUITE_END()
